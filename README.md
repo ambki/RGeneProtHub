@@ -10,7 +10,7 @@ To use the application:
 
 2)  Clone the repository in your computer
 
-3)  Open all the "py" files in R Studio Source all of them and one by one excepting "question_flow.py" (this can be done by using the upper right button from the left upper pane of RStudio -"Source Script"-)
+3)  Open all the "py" files in R Studio. Source all of them and one by one excepting "question_flow.py" (this can be done by using the upper right button from the left upper pane of RStudio -"Source Script"-)
 
 4)  Run the whole file "question_flow.py".
 
