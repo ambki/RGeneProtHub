@@ -8,7 +8,7 @@ import csv
 def HPA_import(file):
 
   url = 'https://www.proteinatlas.org/download/subcellular_location.tsv.zip'
-  extract_dir = '/home/anki/Documents/Python/Downloads'
+  extract_dir = '~/Downloads'
 
 
   check_file = os.path.isfile(extract_dir + '/' + file)
