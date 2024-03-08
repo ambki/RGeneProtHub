@@ -19,6 +19,7 @@ import re
 a = 'Which gene(s) do you want to analyse?: '
 a += '\n\t(Please, enter your ensembl gene ID(s) or hgnc symbol gene ID(s) separated by ",")'
 a += '\n\t(Enter "q" if you want to terminate the program)'
+a += '\ne.g. AK2 or ENSG00000004455, CXCL10'
 
 b = 'Do you also want information about the related protein(s)?:'
 b += '\n\t(Please, enter "yes" to get it or \n\t"q" if you want to terminate the program)'
