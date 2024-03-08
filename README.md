@@ -14,7 +14,7 @@ REQUIREMENTS:
 
 To use the application:
 
-1)  nstall the library "reticulate" (<https://rstudio.github.io/reticulate/>) to be able to use Python code in R. You can do it by using:
+1)  Install the library "reticulate" (<https://rstudio.github.io/reticulate/>) to be able to use Python code in R. You can do it by using:
 
     ```         
     install.packages("reticulate")
@@ -23,8 +23,6 @@ To use the application:
 2)  Clone the repository in your computer.
 
 3)  Open all the "py" files in R Studio. Source all of them and one by one excepting "question_flow.py" (this can be done by using the upper right button from the left upper pane of RStudio -"Source Script"-)
-
-    ![](images/clipboard-2498154263.png){width="124"}
 
 4)  Run the whole file "question_flow.py".
 
