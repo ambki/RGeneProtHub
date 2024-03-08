@@ -54,8 +54,6 @@ while message != 'q':
         geneQuery = Gene(i)
         geneInfo_dict[geneQuery.gene_symbol] = geneQuery
 
-        #input('Press enter to continue...')
-
         continue
   
     else:
