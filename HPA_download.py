@@ -1,20 +1,23 @@
 import urllib
 import zipfile
 import requests
-import os.path
+import os
 import csv
 
 
 def HPA_import(file):
 
   url = 'https://www.proteinatlas.org/download/subcellular_location.tsv.zip'
-  extract_dir = '~/Downloads'
-
-
-  check_file = os.path.isfile(extract_dir + '/' + file)
-
+  
+  if os.name == 'posix':
+    extract_dir = './downloads'
+    check_file = os.path.isfile(extract_dir + '/' + file)
+  elif os.name == 'nt':
+    extract_dir = '.\downloads'
+    check_file = os.path.isfile(extract_dir + '\\' + file)
+  
   if check_file == False:
-    input('\nHuman Protein Atlas PA subcellular location file does not exist and it is going to be downloaded\n\nPress enter to continue...')
+    input('\nHuman Protein Atlas subcellular location file does not exist and it is going to be downloaded\n\nPress enter to continue...')
 
     zip_path, _ = urllib.request.urlretrieve(url)
     with zipfile.ZipFile(zip_path, "r") as f:
