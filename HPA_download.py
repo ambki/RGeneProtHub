@@ -30,7 +30,7 @@ def HPA_import(file):
       csv_reader = csv.DictReader(file, delimiter='\t')
       # Iterate over each row
       for row in csv_reader:
-            # Check and fill empty values with "N/A""
+            # Check and fill empty values with "N/A"
           for key, value in row.items():
             if not value:
               row[key] = 'N/A'  
@@ -45,7 +45,7 @@ def HPA_import(file):
       csv_reader = csv.DictReader(file, delimiter='\t')
       # Iterate over each row
       for row in csv_reader:
-            # Check and fill empty values with "N/A""
+            # Check and fill empty values with "N/A"
           for key, value in row.items():
             if not value:
               row[key] = 'N/A'  
