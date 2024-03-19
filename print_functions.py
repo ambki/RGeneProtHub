@@ -16,18 +16,22 @@ def print_gene_data(gene_dictionary):
     except AttributeError:
       print('\t\t*** Gene information for ' + i.upper() + ' is EMPTY ***')
       continue
-
+    
+    #HGNC synonyms
     print("\nHGNC synonyms: ") 
     if gene_dictionary[i].hgnc_synonyms != 'None':
       for s in gene_dictionary[i].hgnc_synonyms:
         print("\t-" + s)
     else:
       print('\n\t- There are no HGNC synonyms in ensembl database for ' + i + ' gene.')
-  
+    
+    #Entrez ID
     if gene_dictionary[i].entrez_id != 'None':
       print('\nEntrez ID: ' + gene_dictionary[i].entrez_id)
     else:
       print('\nEntrez ID: \n\t- There are no entrez IDs in ensembl database for ' + i+ ' gene.\n')
+    
+    #Associated diseases
     if gene_dictionary[i].disease != 'None':
       print('\nPathologies caused by variations of ' + i.upper() + 
       ': \n(these variations could be of any nature: expression levels, mutations, ...)')
@@ -64,6 +68,8 @@ def retrieve_uniprotID(string_list):
 def print_protein_data(protein_dictionary):
   '''Print all info contained in Protein class coming from ensembl and HPA'''
   
+  input('Press enter to see the protein information...')
+  
   print("\n##########################################################")
   print("\t\tProtein Information".upper())
   print("##########################################################")
@@ -79,6 +85,7 @@ def print_protein_data(protein_dictionary):
       print('\t\t*** Protein information for ' + i.upper() + ' is EMPTY ***')
       continue
     
+    #HPA subcellular location
     if protein_dictionary[i].location != 'Not found':
       print('\nSubcellular location of ' + i.upper() + ' protein: (Source: HPA)' +
       '\n\t- Main: ' + protein_dictionary[i].location['main_location'] +
@@ -96,6 +103,7 @@ def print_protein_data(protein_dictionary):
       print('\t\t2) the protein is always or most of the times secreted')
       print('\n\t(Checking in Uniprot db...)')
       
+      #Uniprot subcellular location
       if protein_dictionary[i].uniprot_info:
         for key, value in protein_dictionary[i].uniprot_info.items():
           if key in 'Subcellular location [CC]':
@@ -117,27 +125,34 @@ def print_protein_data(protein_dictionary):
         go_strings = ['Gene Ontology (molecular function)', 'Gene Ontology (biological process)' ]
         short_strings = ['Entry', 'Organism']
         quant_strings = ['Length', 'Mass']
-      
+        
+        #Short strings
         if key in short_strings:
           print('\n' + key + ': ' + value)
         
+        #HGNC ID
         elif key in 'Gene Names (primary)':
           print('\nHGNC symbol: ' + value)
         
+        #Protein name
         elif key in 'Protein names':
           val = re.split("\((.*?)\) ", value)
           val = list(filter(str.strip, val))
           print('\nProtein name(s): ' + val[0])
         
+        #Length
         elif key in 'Length':
           print('\n' + key + ': ' + value + ' AAs')
         
+        #Protein Mass
         elif key in 'Mass':
           print('\n' +key + ': ' + value + ' Da')
         
+        #Protein sequence
         elif key in 'Sequence':
           print('\n' + key + ': \n\n' + value)
         
+        #Protein tissue location
         elif key in 'Tissue specificity':
           if not value:
             print('\n' + key + ': N/A')
@@ -145,6 +160,7 @@ def print_protein_data(protein_dictionary):
             print('\n' + key + ':')
             print('\n\t- ' + re.sub('TISSUE SPECIFICITY: ','', value))
         
+        #Protein function description
         elif key in 'Function [CC]':
           print('\n' + 'Function description:')
           print('\n\t- ' + re.sub('FUNCTION: ','', value) + '\n')
@@ -168,6 +184,7 @@ def print_uniprot_extended(selection, protein_dictionary):
     
     if protein_dictionary[i].uniprot_info:
       for key, value in  protein_dictionary[i].uniprot_info.items():
+        
         if selection == 0 and key in extended_strings[selection]:
           #'Gene Ontology (molecular function)':
           if not value:
@@ -217,7 +234,6 @@ def print_uniprot_extended(selection, protein_dictionary):
         
         if selection == 5:  
           #All
-#          for key in extended_strings:
           if key in list( extended_strings[i] for i in [0,1] ):
             if not value:
               print('\n' + key + ': N/A')
