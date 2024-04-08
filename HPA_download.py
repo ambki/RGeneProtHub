@@ -1,7 +1,7 @@
 import urllib
 import zipfile
 import requests
-import os
+import os.path
 import csv
 
 
@@ -16,6 +16,10 @@ def HPA_import(file):
     extract_dir = '.\downloads'
     check_file = os.path.isfile(extract_dir + '\\' + file)
   
+
+
+  check_file = os.path.isfile(extract_dir + '/' + file)
+
   if check_file == False:
     input('\nHuman Protein Atlas subcellular location file does not exist and it is going to be downloaded\n\nPress enter to continue...')
 
@@ -28,9 +32,7 @@ def HPA_import(file):
 
     with open(extract_dir + '/' + file, 'r') as file:
       csv_reader = csv.DictReader(file, delimiter='\t')
-      # Iterate over each row
       for row in csv_reader:
-            # Check and fill empty values with "N/A"
           for key, value in row.items():
             if not value:
               row[key] = 'N/A'  
@@ -43,9 +45,7 @@ def HPA_import(file):
 
     with open(extract_dir + '/' + file, 'r') as file:
       csv_reader = csv.DictReader(file, delimiter='\t')
-      # Iterate over each row
       for row in csv_reader:
-            # Check and fill empty values with "N/A"
           for key, value in row.items():
             if not value:
               row[key] = 'N/A'  

@@ -35,6 +35,7 @@ message = []
 message2 = []
 message3 = []
 gene_list = []
+hgnc_list = []
 geneInfo_dict = {}    #Create a dictionary where all the final data are saved
 proteinInfo_dict = {}
 
@@ -45,27 +46,34 @@ while message != 'q':
     print('Program is finished')
     break
   else:
-    
     if "," in message:
       gene_list = message.split(",")
       for i in gene_list:
         print('\n* Retrieving information over ' + i.upper() +  ' gene\n')
         
         geneQuery = Gene(i)
-        geneInfo_dict[geneQuery.gene_symbol] = geneQuery
-
-        continue
-  
+        try:
+          if geneQuery.complete_name:
+            geneInfo_dict[geneQuery.gene_symbol] = geneQuery
+        except AttributeError:
+          continue
     else:
       print('\n* Retrieving information over ' + message.upper() +  ' gene\n')
-      
       geneQuery = Gene(message)
-      geneInfo_dict[geneQuery.gene_symbol] = geneQuery
-
+      
+      try:
+        if geneQuery.complete_name:
+            geneInfo_dict[geneQuery.gene_symbol] = geneQuery
+      except AttributeError:
+        break
+        
+    #print_gene_data(geneInfo_dict)
+  
   answers = ['yes','q']
   message2 = input(b).lower()
   
   if message2 not in answers:
+    print_gene_data(geneInfo_dict)
     print('\n\nPlease, enter a valid answer to get the protein information')
     print('Re-run the program if you still want it')
     print('Program is finished')
@@ -75,32 +83,28 @@ while message != 'q':
     subcellular_data = HPA_import('subcellular_location.tsv')
     print('\n\tSubcellular location file from "Human Protein Atlas" has been loaded')      
 
-    if "," in message:
-      gene_list = message.split(",")
-      for i in gene_list:
-        print('\n* Retrieving information over ' + i.upper() +  ' related protein(s)\n')
+    for key, value in geneInfo_dict.items():
+      hgnc_list.append(key)
+    for i in hgnc_list:
+      print('\n* Retrieving information over ' + i.upper() +  ' related protein(s)\n')
 
-        proteinQuery = Protein(i)
-        proteinInfo_dict[proteinQuery.gene_symbol] = proteinQuery
-    else:
-      print('\n* Retrieving information over ' + message.upper() +  ' related protein(s)\n')
-
-      proteinQuery = Protein(message)
-      proteinInfo_dict[proteinQuery.gene_symbol] = proteinQuery            
+      proteinQuery = Protein(i)
+      proteinInfo_dict[proteinQuery.gene_symbol] = proteinQuery
     
   elif message2 == answers[1]:
+    print_gene_data(geneInfo_dict)
     print("\n\n\tProgram is finished")
     break
   
   print_gene_data(geneInfo_dict)
   print_protein_data(proteinInfo_dict)
-  
+
   answers_extra = ["1","2","3","4","5","6","7","q"]
   message3 = input(c)
-  
+
   extended_strings = ['Gene Ontology (molecular function)', 'Gene Ontology (biological process)', 
   'Subcellular location [CC]',  'Natural variant', 'Involvement in disease']
-  
+
   if "," in message3:
     selection_list = message3.split(",")
     for j in selection_list:      
@@ -112,18 +116,18 @@ while message != 'q':
       else:
         print('\n\nRetrieving "' + extended_strings[int(j)-1]  + '" from local database...\n\n')
         print_uniprot_extended(int(j)-1, proteinInfo_dict)
-  
+
   elif message3 not in answers_extra:
     print('\n\nSelection "' + message3 + '" is not valid')
     print('Please, re-run the program and make a proper selection if you still want to see the information')
     print('Program is finished')
     break
-    
+  
   else:
     if message3.isnumeric():
       print_uniprot_extended(int(message3)-1, proteinInfo_dict)
     else:
       print('Program is finished')
       break
-  
+    
   break

@@ -135,59 +135,22 @@ def ensembl_query(*gene_name):
 
 ######Protein related functions
 
-def protein_query(*gene_name):
+def protein_query(*identifier):
   '''Rerieve uniprot IDs from "gene_dict" created after "ensembl_xref" function'''
   
   proteinInfo_dict = {}
   protein_basics = {}
   protein_hpa_location = {}
 
-  for gene in gene_name:
-    
-    try:
-      if geneInfo_dict[gene.upper()]:
-        uniprot_id = []
-        uniprot_id = geneInfo_dict[gene.upper()].uniprot_id
-        protein_basics ["uniprot_id"] = uniprot_id
-
-      else:
-        continue
-      
-    except (NameError, KeyError, AttributeError):
-      print('\t\t(Gene info not found thus query to ensembl db to get uniprot ID(s))')
-
-      import requests
-
-      server = "https://rest.ensembl.org"
-      headers={ "Content-Type" : "application/json"}
-
-      if gene.startswith("ENSG"):
-        ext_xref = "/xrefs/id/" + gene + "?"
-      else:
-        ext_xref = "/xrefs/name/human/" + gene + "?"
-
-    
-      r_xref = requests.get(server+ext_xref, headers = headers)
-      
-      if not r_xref.ok:
-        break
-      
-      decoded_xref = r_xref.json()
-  
-      uniprot_id = []
-  
-      subset_uniprot = [d for d in decoded_xref if d['dbname']=="Uniprot_gn" ]
-      uniprot_id = [f['primary_id'] for f in subset_uniprot]
-      
-      protein_basics ["uniprot_id"] = uniprot_id
+  for id in identifier:
 
     protein_HPA_list = []  
     for i in subcellular_data:  #Check 'subcellular location' in downloaded HPA data base
       protein_HPA_list.append(i['Gene name'])
       
-    if any(gene.upper() == p for p in protein_HPA_list) == True:
+    if any(id == p for p in protein_HPA_list) == True:
       for i in subcellular_data:
-        if check_string_in_dict(gene.upper(), i):
+        if check_string_in_dict(id, i):
           protein_hpa_location ['main_location'] = i['Main location']
           protein_hpa_location ['additional_location'] = i['Additional location']
           protein_hpa_location ['extracellular_location'] = i['Extracellular location']
@@ -199,26 +162,31 @@ def protein_query(*gene_name):
     else:
       protein_basics ["hpa_location"] = 'Not found'
     
-    unipQuery = uniprot_query(retrieve_uniprotID(uniprot_id))
+    unipQuery = uniprot_query(id)
     protein_basics ['uniprot_query'] = unipQuery
     
-    proteinInfo_dict[gene] = protein_basics
+    try:
+      protein_basics ["uniprot_id"] = unipQuery["Entry"]
+    except KeyError:
+      print('\t\tThere is no Uniprot entry in the database for ' + id + ' gene')
+      break    
+    
+  proteinInfo_dict[id] = protein_basics
 
   return(proteinInfo_dict)
 
-
 ######UNIPROT
 
-def uniprot_query(*uniprot_ID):
+def uniprot_query(*prot_identifier):
   '''Query to uniprot API about a gene with ensembl ID or hgnc symbol'''
   
   import requests
 
   uniprot_dict = {}
   
-  for prot in uniprot_ID: 
+  for id in prot_identifier: 
     try:
-      url = 'https://rest.uniprot.org/uniprotkb/' + prot + '?query=organism_id:9606+AND+database:pdb&format=tsv&fields=gene_primary,protein_name,accession,organism_name,length,mass,sequence,cc_tissue_specificity,go_p,go_f,cc_function,cc_subcellular_location,ft_variant,cc_disease'
+      url = 'https://rest.uniprot.org/uniprotkb/search?&query=gene_exact:' + id + '+AND+organism_id:9606+AND+database:pdb&format=tsv&fields=gene_primary,protein_name,accession,organism_name,length,mass,sequence,cc_tissue_specificity,go_p,go_f,cc_function,cc_subcellular_location,ft_variant,cc_disease'
       if not requests.get(url).ok:
         break
       query = requests.get(url).text.split("\n")#Query to uniprot based on the provided url 
@@ -233,4 +201,3 @@ def uniprot_query(*uniprot_ID):
     uniprot_dict= res #Add to dictionary
     
   return(uniprot_dict)
-

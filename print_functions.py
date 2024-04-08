@@ -31,6 +31,14 @@ def print_gene_data(gene_dictionary):
     else:
       print('\nEntrez ID: \n\t- There are no entrez IDs in ensembl database for ' + i+ ' gene.\n')
     
+    #Uniprot IDs
+    print("\nUniprot ID(s):")
+    if gene_dictionary[i].uniprot_id != 'None':
+      for u in gene_dictionary[i].uniprot_id:
+        print("\t- " + u)
+    else:
+      print('\nUniprot ID(s): \n\t- There are no Uniprot IDs in ensembl database for ' + i+ ' gene.\n')  
+    
     #Associated diseases
     if gene_dictionary[i].disease != 'None':
       print('\nPathologies caused by variations of ' + i.upper() + 
@@ -51,43 +59,27 @@ def print_gene_data(gene_dictionary):
 
 
 ######PROTEIN
-def retrieve_uniprotID(string_list):
-    '''Function to get a string which starts with a certain letter from a list of strings'''
-    
-    import re
-    
-    for string in string_list:        #letters based on accession IDs in Uniprot db
-        if string.startswith('P'):
-            return string
-        elif string.startswith('Q'):
-            return string
-        elif string.startswith('O'):
-            return string
-    return None
-  
+
 def print_protein_data(protein_dictionary):
   '''Print all info contained in Protein class coming from ensembl and HPA'''
   
-  input('Press enter to see the protein information...')
+  #input('Press enter to see the protein information...')
   
   print("\n##########################################################")
   print("\t\tProtein Information".upper())
   print("##########################################################")
 
   for i in protein_dictionary:  
-    try:  
-      print("\n***************************\n")
-      print("Uniprot ID(s) for " + i.upper() +  ' (' + 
-      retrieve_uniprotID(protein_dictionary[i].uniprot_id) + ')'+ " protein: (Source: ENSEMBL)")
-      for u in protein_dictionary[i].uniprot_id:
-        print("\t- " + u)
+    try:
+      print('\n*************************** ' + protein_dictionary[i].uniprot_info["Gene Names (primary)"] + ' related protein information ***************************')
     except AttributeError:
+      print("\n***************************\n")
       print('\t\t*** Protein information for ' + i.upper() + ' is EMPTY ***')
       continue
-    
+
     #HPA subcellular location
     if protein_dictionary[i].location != 'Not found':
-      print('\nSubcellular location of ' + i.upper() + ' protein: (Source: HPA)' +
+      print('\nSubcellular location of ' + i.upper() + ' related protein(s): (Source: HPA)' +
       '\n\t- Main: ' + protein_dictionary[i].location['main_location'] +
       '\n\t- Additional: ' + protein_dictionary[i].location['additional_location'] +
       '\n\t- Extracellular location: ' + protein_dictionary[i].location['extracellular_location'] +
@@ -95,9 +87,7 @@ def print_protein_data(protein_dictionary):
       '\n\t- Reliability: ' + protein_dictionary[i].location['reliability'] + 
       '\n\t- GO Id: ' + protein_dictionary[i].location['go_id'])
     else:
-      print('\nSubcellular location of ' + i.upper() +' related protein(s)' +
-      ' (ID: ' + retrieve_uniprotID(protein_dictionary[i].uniprot_id) + ')' +
-      ': (Source: HPA)')
+      print('\nSubcellular location of ' + i.upper() +' related protein(s): (Source: HPA)')
       print('\t- There is no subcellular location record in HPA database about ' +  i.upper() + ' related protein.')
       print('\t- This could be due to: \n\t\t1) a real absence of information in HPA') 
       print('\t\t2) the protein is always or most of the times secreted')
@@ -107,9 +97,7 @@ def print_protein_data(protein_dictionary):
       if protein_dictionary[i].uniprot_info:
         for key, value in protein_dictionary[i].uniprot_info.items():
           if key in 'Subcellular location [CC]':
-            print('\nSubcellular location of ' + i.upper() +' related protein(s)' +
-            ' (ID: ' + retrieve_uniprotID(protein_dictionary[i].uniprot_id) + ')' +
-            ': (Source: UNIPROT)')
+            print('\nSubcellular location of ' + i.upper() +' related protein(s): (Source: UNIPROT)')
             for j in value.split('.; '):
               print('\t- ' + re.sub('SUBCELLULAR LOCATION: ','', j))
           elif not key:
@@ -180,8 +168,11 @@ def print_uniprot_extended(selection, protein_dictionary):
   'Subcellular location [CC]',  'Natural variant', 'Involvement in disease']
   
   for i in protein_dictionary:
-    print('\n**********Loading selected Information of ' + i  + ' related protein from UNIPROT database**********')
-    
+    try:
+      print('\n**********Loading selected Information of ' + protein_dictionary[i].uniprot_info["Gene Names (primary)"]  + ' related protein from UNIPROT database**********')
+    except AttributeError:
+      continue
+
     if protein_dictionary[i].uniprot_info:
       for key, value in  protein_dictionary[i].uniprot_info.items():
         
