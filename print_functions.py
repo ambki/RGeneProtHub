@@ -110,10 +110,8 @@ def print_protein_data(protein_dictionary):
       print('\n\t\t|---------(Source: UNIPROT)---------|')
       
       for key, value in protein_dictionary[i].uniprot_info.items():
-        go_strings = ['Gene Ontology (molecular function)', 'Gene Ontology (biological process)' ]
         short_strings = ['Entry', 'Organism']
-        quant_strings = ['Length', 'Mass']
-        
+
         #Short strings
         if key in short_strings:
           print('\n' + key + ': ' + value)
