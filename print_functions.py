@@ -167,7 +167,7 @@ def print_uniprot_extended(selection, protein_dictionary):
   
   for i in protein_dictionary:
     try:
-      print('\n**********Retrieving ' + extended_strings[selection] + ' of ' + protein_dictionary[i].uniprot_info["Gene Names (primary)"]  + ' related protein from UNIPROT database')
+      print('\n**********Retrieving "' + extended_strings[selection] + '" of ' + protein_dictionary[i].uniprot_info["Gene Names (primary)"]  + ' related protein from UNIPROT database...')
     except AttributeError:
       continue
 
