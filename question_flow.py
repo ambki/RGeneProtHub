@@ -22,7 +22,7 @@ a += '\n\t(Enter "q" if you want to terminate the program)'
 a += '\ne.g. AK2 or ENSG00000004455, CXCL10'
 
 b = 'Do you also want information about the related protein(s)?:'
-b += '\n\t(Please, enter "yes" to get it or \n\t"q" if you want to terminate the program)'
+b += '\n\t(Please, enter "yes" to get it or "q" if you want to terminate the program and print the gene info)'
 
 c = '\nThere is some extensive information downloaded from Uniprot db.'
 c += '\nEnter one or more of the following numbers (separated by ",") if you want to see it:' 
