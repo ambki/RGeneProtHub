@@ -167,12 +167,12 @@ def print_uniprot_extended(selection, protein_dictionary):
   
   for i in protein_dictionary:
     try:
-      print('\n**********Loading selected Information of ' + protein_dictionary[i].uniprot_info["Gene Names (primary)"]  + ' related protein from UNIPROT database**********')
+      print('\n**********Retrieving ' + extended_strings[selection] + ' of ' + protein_dictionary[i].uniprot_info["Gene Names (primary)"]  + ' related protein from UNIPROT database**********')
     except AttributeError:
       continue
 
     if protein_dictionary[i].uniprot_info:
-      for key, value in  protein_dictionary[i].uniprot_info.items():
+      for key, value in protein_dictionary[i].uniprot_info.items():
         
         if selection == 0 and key in extended_strings[selection]:
           #'Gene Ontology (molecular function)':

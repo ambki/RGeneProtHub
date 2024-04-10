@@ -112,7 +112,6 @@ while message != 'q':
         print('Program is finished')
         break
       else:
-        print('\n\nRetrieving "' + extended_strings[int(j)-1]  + '" from local database...\n\n')
         print_uniprot_extended(int(j)-1, proteinInfo_dict)
 
   elif message3 not in answers_extra:
