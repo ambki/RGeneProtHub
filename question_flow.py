@@ -36,11 +36,11 @@ message2 = []
 message3 = []
 gene_list = []
 hgnc_list = []
-geneInfo_dict = {}    #Create a dictionary where all the final data are saved
+geneInfo_dict = {}    
 proteinInfo_dict = {}
 
 while message != 'q':
-  message = input(a).replace(" ", "") #"replace" to eliminate spaces in the input
+  message = input(a).replace(" ", "")
   
   if message == 'q':
     print('Program is finished')
@@ -66,8 +66,6 @@ while message != 'q':
             geneInfo_dict[geneQuery.gene_symbol] = geneQuery
       except AttributeError:
         break
-        
-    #print_gene_data(geneInfo_dict)
   
   answers = ['yes','q']
   message2 = input(b).lower()
