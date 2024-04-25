@@ -8,12 +8,12 @@ def remove_duplicates(dictionary_list):
   unique_keys = []  # empty dictionary for tracking unique keys
   result = []  # new list for storing a dictionary without duplicate keys
     
-  for dict in dictionary_list:
-    if dict['description'] in unique_keys:
+  for d in dictionary_list:
+    if d['description'] in unique_keys:
       continue  # skip this dictionary as it has a duplicated key
     else:  # executed only if the for loop completes without hitting a break
-      result.append(dict)  # add the dictionary to the result list
-      unique_keys.append(dict['description'])  # update unique description
+      result.append(d)  # add the dictionary to the result list
+      unique_keys.append(d['description'])  # update unique description
       
   return result
 
